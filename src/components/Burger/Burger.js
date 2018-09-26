@@ -26,10 +26,11 @@ const burger = (props) => {
     // return arr.concat(el)
     // the initial value or reduce value is an empty array
     // .reduce((arr, el) => [...arr, ...el], []);
-    .reduce((arr, el) => {
-      // console.log('arr', arr);
-      // console.log('el', el);
-      return arr.concat(el)
+    .reduce((prevValue, curValue) => {
+      console.log('prevValue', prevValue)
+      // console.log('curValue', curValue);
+      // the initial value of the reduce value will be an empty []
+      return prevValue.concat(curValue)
     }, []);
 
   // console.log('transformedIngredients', transformedIngredients)
