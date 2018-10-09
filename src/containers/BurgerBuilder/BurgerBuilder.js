@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
-import Aux from '../../hoc/_Aux'
-import Burger from "../../components/Burger/Burger";
-import BuildControls from '../../components/Burger/BuildControls/BuildControls';
+import Aux from 'hoc/_Aux'
+import Burger from "components/Burger/Burger";
+import BuildControls from 'components/Burger/BuildControls/BuildControls';
+import Modal from 'components/UI/Modal/Modal';
+import OrderSummary from 'components/Burger/OrderSummary/OrderSummary';
 
 const INGREDIENT_PRICES = {
   salad: 0.5,
@@ -22,6 +24,7 @@ class BurgerBuilder extends Component {
       },
       totalPrice: 4,
       purchasable: false,
+      purchasing: false
     }
   }
 
@@ -31,7 +34,7 @@ class BurgerBuilder extends Component {
     // };
     // turn this obj in an array
     const sum = Object.keys(ingredients)
-      .map(({igKey}) => {
+      .map((igKey) => {
         // return the value
         // console.log("igKey", Object.keys(ingredients));
         // console.log("ingredients", ingredients[igKey]);
@@ -88,6 +91,15 @@ class BurgerBuilder extends Component {
 
     this.updatePurchaseState(updatedIngredients);
   }
+
+  purchaseHandler  = () => {
+    this.setState({purchasing: true});
+  }
+
+  modalClosed = () => {
+    this.setState({purchasing: false});
+  }
+
   render() {
     const disabledInfo = {
       ...this.state.ingredients
@@ -99,6 +111,11 @@ class BurgerBuilder extends Component {
     // console.log('disabledInfo', disabledInfo)
     return (
       <Aux>
+        <Modal 
+          show={this.state.purchasing}
+          modalClosed={this.modalClosed} >
+          <OrderSummary ingredients={this.state.ingredients} />
+        </Modal>
         <Burger ingredients={this.state.ingredients} />
         <BuildControls 
           ingredientAdded={this.addIngredientHandler}
@@ -106,10 +123,11 @@ class BurgerBuilder extends Component {
           disabled={disabledInfo}
           price={this.state.totalPrice}
           purchasable={this.state.purchasable}
+          ordered={this.purchaseHandler}
         />
       </Aux>
     )
   }
 }
 
-export default BurgerBuilder;;
+export default BurgerBuilder;
