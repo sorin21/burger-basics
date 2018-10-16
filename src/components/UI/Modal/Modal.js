@@ -9,7 +9,9 @@ import classes from './Modal.css';
 class Modal extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
-    return nextProps.show !== this.props.show;
+    // children refers to Spinner and OrderSummary  
+    return nextProps.show !== this.props.show || 
+      nextProps.children !== this.props.children;
     
   }
 
