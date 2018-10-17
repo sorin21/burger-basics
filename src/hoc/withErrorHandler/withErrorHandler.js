@@ -10,26 +10,36 @@ const withErrorHandler = (WrappedComponent, axios) => {
       error: null
     }
 
-    componentWillMount() {
-      axios.interceptors.request.use(request => {
+    // instead of componentWillMount
+    fetchDataHandler = () => {
+      this.reqInterceptor = axios.interceptors.request.use(request => {
         // clear the errors
         this.setState({error: null});
         return request;
       })
       // setup the global interceptor, that allows us to handle errors
       // this funct use will get the response(null)
-      axios.interceptors.response.use(response => response, error => {
+      this.resInterceptor = axios.interceptors.response.use(response => response, error => {
         // show the error modal
         console.log('error', error)
         this.setState({error});
       })
     }
 
+    componentWillUnmount = () => {
+      // console.log('Will unmont', this.reqInterceptor, this.resInterceptor);
+      // console.log('Will unmont', this.resInterceptor);
+      axios.interceptors.request.eject(this.reqInterceptor);
+      axios.interceptors.response.eject(this.resInterceptor);
+    };
+    
+
     errorConfirmedHandler = () => {
       this.setState({error: null})
     }
 
     render() {
+      this.fetchDataHandler();
       // returns some jsx including the wrapped comp
       return (
         // distribute any props that this comp might receive
